@@ -523,7 +523,7 @@
         <xsl:otherwise>1</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="scaleFactor" select="1 div $markerSize" />
+    <xsl:variable name="scaleFactor" select="1 div number($markerSize)" />
     <a-marker type="pattern" url="{@marker}.patt" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
       <a-entity rotation="0 0 0" scale="{$scaleFactor} {$scaleFactor} {$scaleFactor}">
         <a-entity position="0 0.005 {0 - $markerSize}">
@@ -549,7 +549,7 @@
         <xsl:otherwise>1</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="scaleFactor" select="1 div $markerSize" />
+    <xsl:variable name="scaleFactor" select="1 div number($markerSize)" />
     <a-marker type="pattern" url="{$pattUrl}.patt" smooth="true" smoothCount="10" smoothTolerance="0.01" smoothThreshold="5">
       <a-entity rotation="0 0 0" scale="{$scaleFactor} {$scaleFactor} {$scaleFactor}">
         <a-entity position="0 0.005 {0 - $markerSize}">
@@ -585,7 +585,7 @@
         <xsl:variable name="kf2" select="KEYFRAME[last()]" />
         <xsl:variable name="dur">
           <xsl:choose>
-            <xsl:when test="$kf1/@time and $kf2/@time"><xsl:value-of select="($kf2/@time - $kf1/@time) * 1000"/></xsl:when>
+            <xsl:when test="$kf1/@time and $kf2/@time"><xsl:value-of select="(number($kf2/@time) - number($kf1/@time)) * 1000"/></xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
@@ -624,7 +624,7 @@
               <xsl:value-of select="0 - $kf1/@value"/>
             </xsl:when>
             <xsl:when test="$attr='sxyz'">
-              <xsl:value-of select="concat($kf1/@value * $sx, ' ', $kf1/@value * $sy, ' ', $kf1/@value * $sz)"/>
+              <xsl:value-of select="concat(number($kf1/@value) * number($sx), ' ', number($kf1/@value) * number($sy), ' ', number($kf1/@value) * number($sz))"/>
             </xsl:when>
           </xsl:choose>
         </xsl:variable>
@@ -641,7 +641,7 @@
               <xsl:value-of select="0 - $kf2/@value"/>
             </xsl:when>
             <xsl:when test="$attr='sxyz'">
-              <xsl:value-of select="concat($kf2/@value * $sx, ' ', $kf2/@value * $sy, ' ', $kf2/@value * $sz)"/>
+              <xsl:value-of select="concat(number($kf2/@value) * number($sx), ' ', number($kf2/@value) * number($sy), ' ', number($kf2/@value) * number($sz))"/>
             </xsl:when>
           </xsl:choose>
         </xsl:variable>
@@ -680,7 +680,7 @@
     </xsl:variable>
 
     <a-entity geometry="primitive: box; width: {$w}; height: {$h}; depth: {$d}" class="clickable">
-      <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="$w + 0.1"/>; height: <xsl:value-of select="$h + 0.1"/></xsl:attribute>
+      <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="number($w) + 0.1"/>; height: <xsl:value-of select="number($h) + 0.1"/></xsl:attribute>
       <xsl:attribute name="fdar-switch">transmitKey: <xsl:value-of select="$transmitKey"/>; url: <xsl:value-of select="$wsUrl"/>; on: <xsl:value-of select="$isOn"/>;</xsl:attribute>
       
       <xsl:choose>
@@ -711,7 +711,7 @@
     <xsl:variable name="d"><xsl:choose><xsl:when test="@d"><xsl:value-of select="@d"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose></xsl:variable>
     
     <a-entity geometry="primitive: box; width: {$w}; height: {$h}; depth: {$d}" class="clickable" navigate-on-click="url: {$linkUrl}">
-      <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="$w + 0.1"/>; height: <xsl:value-of select="$h + 0.1"/></xsl:attribute>
+      <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="number($w) + 0.1"/>; height: <xsl:value-of select="number($h) + 0.1"/></xsl:attribute>
       <xsl:choose>
         <xsl:when test="@rgba or @rgb">
            <xsl:attribute name="fdar-color">rgba: <xsl:choose><xsl:when test="@rgba"><xsl:value-of select="@rgba"/></xsl:when><xsl:otherwise><xsl:value-of select="@rgb"/></xsl:otherwise></xsl:choose></xsl:attribute>
@@ -811,7 +811,7 @@
           </xsl:choose>
         </xsl:variable>
         <xsl:attribute name="class">clickable</xsl:attribute>
-        <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="$picW + 0.1"/>; height: <xsl:value-of select="$picH + 0.1"/></xsl:attribute>
+        <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="number($picW) + 0.1"/>; height: <xsl:value-of select="number($picH) + 0.1"/></xsl:attribute>
         <xsl:attribute name="navigate-on-click">url: <xsl:value-of select="$linkUrl"/></xsl:attribute>
       </xsl:if>
 
@@ -844,7 +844,7 @@
     <xsl:variable name="vHeight"><xsl:choose><xsl:when test="@h"><xsl:value-of select="@h"/></xsl:when><xsl:otherwise>0.9</xsl:otherwise></xsl:choose></xsl:variable>
     <xsl:if test="$videoUrl != ''">
       <a-video src="#vid-{generate-id()}" width="{$vWidth}" height="{$vHeight}" class="clickable" crossorigin="anonymous" video-controller="">
-        <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="$vWidth + 0.1"/>; height: <xsl:value-of select="$vHeight + 0.1"/></xsl:attribute>
+        <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="number($vWidth) + 0.1"/>; height: <xsl:value-of select="number($vHeight) + 0.1"/></xsl:attribute>
         
         <xsl:choose>
           <xsl:when test="ancestor::TARGET or ancestor::IMGTARGET">
@@ -884,9 +884,9 @@
         <xsl:variable name="lh"><xsl:choose><xsl:when test="LINK/@h"><xsl:value-of select="LINK/@h"/></xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
         <a-entity scale="{$textScale}">
           <a-plane class="clickable" material="color: #0088ff; opacity: 0.15; transparent: true; side: double; depthWrite: false; depthTest: false" position="0 0 0.05">
-            <xsl:attribute name="width"><xsl:value-of select="2 + $lw"/></xsl:attribute>
-            <xsl:attribute name="height"><xsl:value-of select="1 + $lh"/></xsl:attribute>
-            <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="2 + $lw + 0.1"/>; height: <xsl:value-of select="1 + $lh + 0.1"/></xsl:attribute>
+            <xsl:attribute name="width"><xsl:value-of select="2 + number($lw)"/></xsl:attribute>
+            <xsl:attribute name="height"><xsl:value-of select="1 + number($lh)"/></xsl:attribute>
+            <xsl:attribute name="hover-outline">type: rect; width: <xsl:value-of select="2 + number($lw) + 0.1"/>; height: <xsl:value-of select="1 + number($lh) + 0.1"/></xsl:attribute>
             <xsl:attribute name="navigate-on-click">url: <xsl:value-of select="$linkUrl"/></xsl:attribute>
             <xsl:text> </xsl:text>
           </a-plane>
